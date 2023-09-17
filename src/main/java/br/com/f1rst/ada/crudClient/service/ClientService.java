@@ -32,7 +32,7 @@ public class ClientService {
                 .map((clientDocument) -> new ResponseDTO("Cliente cadastrado com sucesso!",
                         this.clientConverter.toClientDTO(clientDocument),
                         LocalDateTime.now()))
-                .onErrorReturn(new ResponseDTO("Erro ao buscar cliente! email não possui cadastro",
+                .onErrorReturn(new ResponseDTO("Erro ao cadastrar cliente! email já possui cadastro",
                         new ClientDTO(),
                         LocalDateTime.now()));
 
@@ -57,5 +57,26 @@ public class ClientService {
                 )).onErrorReturn(new ResponseDTO("Erro ao buscar cliente! email não possui cadastro",
                         new ClientDTO(),LocalDateTime.now()));
     }
-    
+
+    public Mono<ResponseDTO> update(ClientDTO clientDTO) {
+
+        Mono<Client> clientMono = this.clientRepository.findByEmail(clientDTO.getEmail());
+
+        return clientMono.flatMap((existClient) -> {
+            existClient.setName(clientDTO.getName());
+            existClient.setName(clientDTO.getName());
+            existClient.setAge(clientDTO.getAge());
+            return this.clientRepository.save(existClient);
+        }).map(client -> new ResponseDTO<>("CLiente alterado com sucesso!",
+                this.clientConverter.toClientDTO(client),
+                LocalDateTime.now()));
+    }
+
+    public Mono<ResponseDTO> delete(String email) {
+        return this.clientRepository
+                .deleteByEmail(email).map((client) -> new ResponseDTO("Cliente removido com sucesso!",
+                        null,
+                        LocalDateTime.now()));
+    }
+
 }
