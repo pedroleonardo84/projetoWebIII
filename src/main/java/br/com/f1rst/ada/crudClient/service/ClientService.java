@@ -38,23 +38,23 @@ public class ClientService {
 
 
     }
-/*
-    public Flux<ResponseDTO<ProductDTO>> getAll() {
-        Flux<Product> productFlux = this.productRepository.findAll();
-        return productFlux
-                .map(product -> new ResponseDTO("Listagem de produtos retornada com sucesso!",
-                        this.productConverter.toProductDTO(product),
+
+    public Flux<ResponseDTO<ClientDTO>> getAll() {
+        Flux<Client> clientFlux = this.clientRepository.findAll();
+        return clientFlux
+                .map(client -> new ResponseDTO("Lista de clientes retornada com sucesso!",
+                        this.clientConverter.toClientDTO(client),
                         LocalDateTime.now()
                 ));
     }
 
-    public Mono<ResponseDTO<ProductDTO>> findByCode(String code) {
-        Mono<Product> productMono = this.productRepository.findByCode(code);
-        return productMono
-                .map(product -> new ResponseDTO("Busca por code retornada com sucesso!",
-                        this.productConverter.toProductDTO(product),
+    public Mono<ResponseDTO<ClientDTO>> findByEmail(String email) {
+        Mono<Client> clientMono = this.clientRepository.findByEmail(email);
+        return clientMono
+                .map(client -> new ResponseDTO("Busca por email retornada com sucesso!",
+                        this.clientConverter.toClientDTO(client),
                         LocalDateTime.now()
                 ));
 
-    }*/
+    }
 }
