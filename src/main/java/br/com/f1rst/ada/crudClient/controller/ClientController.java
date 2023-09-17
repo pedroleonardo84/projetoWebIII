@@ -32,11 +32,19 @@ public class ClientController {
         return this.clientService.getAll();
     }
 
-    @GetMapping("/findByEmail")
+    @GetMapping("{email}")
     @ResponseStatus(value = HttpStatus.OK)
     @Operation(description = "Find by Client email")
-    public Mono<ResponseDTO<ClientDTO>> findByCode(@PathVariable("email") String email) {
+    public Mono<ResponseDTO> findByCode(@PathVariable("email") String email) {
         return this.clientService.findByEmail(email);
+    }
+
+    @PutMapping("/update")
+    @ResponseStatus(value = HttpStatus.CREATED)
+    @Operation(description = "Create a client",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody())
+    public Mono<ResponseDTO> update(@RequestBody ClientDTO clientDTO) {
+        return this.clientService.create(clientDTO);
     }
 
 }

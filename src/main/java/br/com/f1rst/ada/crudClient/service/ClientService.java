@@ -32,7 +32,7 @@ public class ClientService {
                 .map((clientDocument) -> new ResponseDTO("Cliente cadastrado com sucesso!",
                         this.clientConverter.toClientDTO(clientDocument),
                         LocalDateTime.now()))
-                .onErrorReturn(new ResponseDTO("Erro ao cadastrar produto",
+                .onErrorReturn(new ResponseDTO("Erro ao buscar cliente! email não possui cadastro",
                         new ClientDTO(),
                         LocalDateTime.now()));
 
@@ -48,13 +48,14 @@ public class ClientService {
                 ));
     }
 
-    public Mono<ResponseDTO<ClientDTO>> findByEmail(String email) {
+    public Mono<ResponseDTO> findByEmail(String email) {
         Mono<Client> clientMono = this.clientRepository.findByEmail(email);
         return clientMono
                 .map(client -> new ResponseDTO("Busca por email retornada com sucesso!",
                         this.clientConverter.toClientDTO(client),
                         LocalDateTime.now()
-                ));
-
+                )).onErrorReturn(new ResponseDTO("Erro ao buscar cliente! email não possui cadastro",
+                        new ClientDTO(),LocalDateTime.now()));
     }
+    
 }
